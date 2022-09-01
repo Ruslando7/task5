@@ -41,7 +41,7 @@
             "enabled": false
         },
         "platform": {
-            "php": "7.4.0"
+            "php": "8.0.8"
         }
     },
     "scripts": {
