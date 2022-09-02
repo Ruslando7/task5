@@ -2,42 +2,80 @@ function show(res) {
     $('#table').html(res)
 }
 
-var clicks = 0;
-$('.check').on('click', function (a) {
-    var id = $(this).data('id');
-    var button;
-    button = document.getElementById(id).innerHTML;
-    if (button == "") {
-        sign = "X";
-        document.getElementById(id).innerHTML = sign;
-        clicks = ++clicks;
-        if (clicks > 4) {
-            win();
-            alert('Ничья');
-            location.reload();
+function check(arr) {
+    let x = randomInteger(1,9);
+    var button = document.getElementById(x).innerHTML;
+    if (arr.includes(x) || button != "") {
+        if (arr.length < 4) {
+            check(arr);
+        } else {
             return false;
         }
-        setO();
+    } else {
+        arr.push(x);
+        document.getElementById(x).innerHTML = "O";
     }
-    win();
-});
+}
+let cells = document.getElementsByClassName('check');
+game(cells);
+
+function game(cells) {
+    let i = 0;
+    let arr = [];
+    for (let cell of cells) {
+        cell.addEventListener('click', function () {
+            if (this.innerHTML == "") {
+                this.innerHTML = 'X';
+                check(arr);
+            }
+            if (isWin(cells)) {
+                location.reload();
+            } else if (i == 4) {
+                alert('Ничья');
+                location.reload();
+            }
+            i++;
+        })
+    }
+}
+
+function isWin(cells) {
+    let arrs = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+    ];
+
+    for (let arr of arrs) {
+        if (
+            cells[arr[0]].innerHTML == cells[arr[1]].innerHTML &&
+            cells[arr[1]].innerHTML == cells[arr[2]].innerHTML &&
+            cells[arr[0]].innerHTML != ''
+        ) {
+            if (cells[arr[0]].innerHTML == 'X') {
+                up();
+                alert('Вы победили');
+            } else {
+                down();
+                alert('Победили нолики');
+            }
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 function randomInteger(min, max) {
     // случайное число от min до (max+1)
     let rand = min + Math.random() * (max + 1 - min);
     return Math.floor(rand);
-}
-
-
-function setO() {
-    var button;
-    let i = randomInteger(1,9);
-    button = document.getElementById(i).innerHTML;
-    if (button == '') {
-        document.getElementById(i).innerHTML = "O";
-    } else {
-        setO();
-    }
 }
 
 function up() {
@@ -73,94 +111,3 @@ function down() {
 }
 
 
-function win() {
-    check = document.getElementsByClassName('check');
-    if (check[0].innerHTML == 'X' && check[1].innerHTML == 'X' && check[2].innerHTML == 'X') {
-        up();
-        alert('Победили крестики');
-        location.reload();
-    }
-    if (check[3].innerHTML == 'X' && check[4].innerHTML == 'X' && check[5].innerHTML == 'X') {
-        up();
-        alert('Победили крестики');
-        location.reload();
-        
-    }
-    if (check[6].innerHTML == 'X' && check[7].innerHTML == 'X' && check[8].innerHTML == 'X') {
-        up();
-        alert('Победили крестики');
-        location.reload();
-        
-    }
-    if (check[0].innerHTML == 'X' && check[3].innerHTML == 'X' && check[6].innerHTML == 'X') {
-        up();
-        alert('Победили крестики');
-        location.reload();
-    }
-    if (check[1].innerHTML == 'X' && check[4].innerHTML == 'X' && check[7].innerHTML == 'X') {
-        up();
-        alert('Победили крестики');
-        location.reload();
-        
-    }
-    if (check[2].innerHTML == 'X' && check[5].innerHTML == 'X' && check[8].innerHTML == 'X') {
-        up();
-        alert('Победили крестики');
-        location.reload();
-        
-    }
-    if (check[0].innerHTML == 'X' && check[4].innerHTML == 'X' && check[8].innerHTML == 'X') {
-        up();
-        alert('Победили крестики');
-        location.reload();
-        
-    }
-    if (check[2].innerHTML == 'X' && check[4].innerHTML == 'X' && check[6].innerHTML == 'X') {
-        up();
-        alert('Победили крестики');
-        location.reload();
-        
-    }
-
-
-    if (check[0].innerHTML == 'O' && check[1].innerHTML == 'O' && check[2].innerHTML == 'O') {
-        alert('Победили нолики');
-        down();
-        location.reload();
-    }
-    if (check[3].innerHTML == 'O' && check[4].innerHTML == 'O' && check[5].innerHTML == 'O') {
-        alert('Победили нолики');
-        down();
-        location.reload();
-    }
-    if (check[6].innerHTML == 'O' && check[7].innerHTML == 'O' && check[8].innerHTML == 'O') {
-        alert('Победили нолики');
-        down();
-        location.reload();
-    }
-    if (check[0].innerHTML == 'O' && check[3].innerHTML == 'O' && check[6].innerHTML == 'O') {
-        alert('Победили нолики');
-        down();
-        location.reload();
-    }
-    if (check[1].innerHTML == 'O' && check[4].innerHTML == 'O' && check[7].innerHTML == 'O') {
-        alert('Победили нолики');
-        down();
-        location.reload();
-    }
-    if (check[2].innerHTML == 'O' && check[5].innerHTML == 'O' && check[8].innerHTML == 'O') {
-        alert('Победили нолики');
-        down();
-        location.reload();
-    }
-    if (check[0].innerHTML == 'O' && check[4].innerHTML == 'O' && check[8].innerHTML == 'O') {
-        alert('Победили нолики');
-        down();
-        location.reload();
-    }
-    if (check[2].innerHTML == 'O' && check[4].innerHTML == 'O' && check[6].innerHTML == 'O') {
-        alert('Победили нолики');
-        down();
-        location.reload();
-    }
-}
